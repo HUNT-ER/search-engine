@@ -47,24 +47,25 @@ public class LinearSearchMenuStrategy implements MenuStrategy {
   }
 
   private void find() {
+    BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     Scanner scanner = new Scanner(System.in);
     System.out.print("\nEnter the number of search queries:\n> ");
     try {
       int maxResultCount = scanner.nextInt();
       System.out.print("\nEnter data to search people:\n> ");
-      String pattern = scanner.next().toLowerCase();
+      String pattern = input.readLine().toLowerCase();
 
       List<String> matches = Arrays.stream(peopleList).filter(x -> x.toLowerCase().contains(pattern)).collect(Collectors.toList());
 
-      if (matches.size() == 0) {
+      if (matches.size() == 0 || "".equals(pattern)) {
         System.out.println("No matching people found.");
         return;
       }
 
-      for (int i = 0; i < matches.size() & i <= maxResultCount; i++) {
+      for (int i = 0; i < matches.size() & i < maxResultCount; i++) {
         System.out.println(matches.get(i));
       }
-    } catch (InputMismatchException e) {
+    } catch (InputMismatchException | IOException e) {
       e.printStackTrace();
     }
   }
