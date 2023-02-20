@@ -18,11 +18,9 @@ public class LinearSearchMenuStrategy implements MenuStrategy {
   public void showMenu(Session session) {
     try {
       insertPeoples();
+      find();
     } catch (IOException e) {
       e.printStackTrace();
-    }
-    while (true) {
-      find();
     }
   }
 
@@ -51,19 +49,22 @@ public class LinearSearchMenuStrategy implements MenuStrategy {
     Scanner scanner = new Scanner(System.in);
     System.out.print("\nEnter the number of search queries:\n> ");
     try {
-      int maxResultCount = scanner.nextInt();
-      System.out.print("\nEnter data to search people:\n> ");
-      String pattern = input.readLine().toLowerCase();
+      int countOfScans = scanner.nextInt();
+      for (int i = 0; i < countOfScans; i++) {
+        System.out.print("\nEnter data to search people:\n> ");
+        String pattern = input.readLine().toLowerCase();
 
-      List<String> matches = Arrays.stream(peopleList).filter(x -> x.toLowerCase().contains(pattern)).collect(Collectors.toList());
+        List<String> matches = Arrays.stream(peopleList).filter(x -> x.toLowerCase().contains(pattern)).collect(Collectors.toList());
 
-      if (matches.size() == 0 || "".equals(pattern)) {
-        System.out.println("No matching people found.");
-        return;
-      }
+        if (matches.size() == 0 || "".equals(pattern)) {
+          System.out.println("No matching people found.");
+          continue;
+        }
 
-      for (int i = 0; i < matches.size() & i < maxResultCount; i++) {
-        System.out.println(matches.get(i));
+        System.out.println("\nFound people:");
+        for (int j = 0; j < matches.size(); j++) {
+          System.out.println(matches.get(j));
+        }
       }
     } catch (InputMismatchException | IOException e) {
       e.printStackTrace();
