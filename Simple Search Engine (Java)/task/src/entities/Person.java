@@ -1,4 +1,4 @@
-package search;
+package entities;
 
 public class Person {
   private String firstName;

@@ -1,15 +1,12 @@
 package menu;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-import search.Person;
+import entities.Person;
 import search.Session;
 
 public class PersonSearchMenuStrategy implements MenuStrategy {
@@ -17,15 +14,30 @@ public class PersonSearchMenuStrategy implements MenuStrategy {
 
   @Override
   public void showMenu(Session session) {
-    try {
-      insertPeoples();
-      find();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    insertPeoples();
+    Scanner scanner = new Scanner(System.in);
+    int choice;
+    menu:
+    do {
+      printMenu();
+      choice = Integer.parseInt(scanner.nextLine().trim());
+      switch (choice) {
+        case 1:
+          find();
+          break;
+        case 2:
+          printAllPeople();
+          break;
+        case 0:
+          System.out.println("\nBye!");
+          break menu;
+        default:
+          System.out.println("\nIncorrect option! Try again.\n");
+      }
+    } while (true);
   }
 
-  private void insertPeoples() throws IOException {
+  private void insertPeoples() {
     System.out.print("Enter the number of people:\n> ");
     Scanner scanner = new Scanner(System.in);
     personList = new ArrayList<>();
@@ -53,37 +65,40 @@ public class PersonSearchMenuStrategy implements MenuStrategy {
 
   private void find() {
     Scanner scanner = new Scanner(System.in);
-    System.out.print("\nEnter the number of search queries:\n> ");
-    try {
-      int countOfScans = Integer.parseInt(scanner.nextLine().trim());
-      for (int i = 0; i < countOfScans; i++) {
-        System.out.print("\nEnter data to search people:\n> ");
-        String pattern = scanner.nextLine().toLowerCase();
-        personList.stream()
-            .filter(
-                person -> person.getFirstName().toLowerCase().contains(pattern) ||
+    System.out.print("\nEnter a name or email to search all suitable people.\n> ");
+    String pattern = scanner.nextLine().toLowerCase();
+    personList.stream()
+        .filter(
+            person -> person.getFirstName().toLowerCase().contains(pattern) ||
                 person.getLastName().toLowerCase().contains(pattern) ||
                 person.getEmail().toLowerCase().contains(pattern)
-                ).collect(Collectors.toList());
+        ).collect(Collectors.toList());
 
-        List<Person> matches = personList.stream().filter(
-                person -> person.getFirstName().toLowerCase().contains(pattern) ||
-                    person.getLastName().toLowerCase().contains(pattern) ||
-                    person.getEmail().toLowerCase().contains(pattern)).collect(Collectors.toList());
+    List<Person> matches = personList.stream().filter(
+        person -> person.getFirstName().toLowerCase().contains(pattern) ||
+            person.getLastName().toLowerCase().contains(pattern) ||
+            person.getEmail().toLowerCase().contains(pattern)).collect(Collectors.toList());
 
-        if (matches.size() == 0 || "".equals(pattern)) {
-          System.out.println("No matching people found.");
-          continue;
-        }
+    if (matches.size() == 0 || "".equals(pattern)) {
+      System.out.println("No matching people found.");
+    }
 
-        System.out.println("\nFound people:");
-        for (int j = 0; j < matches.size(); j++) {
-          System.out.println(matches.get(j));
-        }
-      }
-    } catch (InputMismatchException e) {
-      e.printStackTrace();
+    System.out.println("\nFound people:");
+    for (int j = 0; j < matches.size(); j++) {
+      System.out.println(matches.get(j));
     }
   }
 
+  private void printMenu() {
+    System.out.println("\n=== Menu ===\n"
+        + "1. Find a person\n"
+        + "2. Print all people\n"
+        + "0. Exit");
+  }
+
+  private void printAllPeople() {
+    System.out.println("\n=== List of people ===");
+    personList.forEach(System.out::println);
+    System.out.println();
+  }
 }
