@@ -1,7 +1,6 @@
 package search;
 
-import menu.LinearSearchMenuStrategy;
-import menu.MenuStrategy;
+import menu.*;
 
 public class Session {
 
@@ -12,7 +11,7 @@ public class Session {
   }
 
   public Session() {
-    menu = new LinearSearchMenuStrategy();
+    menu = new PersonSearchMenuStrategy();
   }
 
   public void runSession() {
