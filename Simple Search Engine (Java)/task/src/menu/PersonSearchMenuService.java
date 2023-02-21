@@ -1,10 +1,7 @@
 package menu;
 
 import database.PersonStorage;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import entities.Person;
 import search.SearchService;
 import search.Session;
 

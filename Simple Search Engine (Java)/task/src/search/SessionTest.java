@@ -1,8 +1,5 @@
 package search;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class SessionTest {
 
   public static void main(String[] args) {
@@ -10,7 +7,4 @@ public class SessionTest {
 
     session.runSession();
   }
-
-
-
 }

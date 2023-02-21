@@ -11,9 +11,10 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class PersonStorage {
+
   private List<Person> personList;
   private Map<Integer, Person> personMap;
-  private Map<Integer, String[]> personMapString;
+  private Map<Integer, String[]> dataMap;
 
   public PersonStorage(String pathToData) {
     fillStorageFromFile(pathToData);
@@ -23,11 +24,15 @@ public class PersonStorage {
     return Collections.unmodifiableList(personList);
   }
 
+  public Map<Integer, String[]> getDataMap() {
+    return Collections.unmodifiableMap(dataMap);
+  }
+
   private void fillStorageFromFile(String path) {
     try {
       personList = new ArrayList<>();
       personMap = new HashMap<>();
-      personMapString = new HashMap<>();
+      dataMap = new HashMap<>();
       File data = new File(path);
       try (Scanner scanner = new Scanner(data);) {
         int i = 0;
@@ -47,7 +52,7 @@ public class PersonStorage {
           }
           personList.add(person);
           personMap.put(i, person);
-          personMapString.put(i, input);
+          dataMap.put(i, input);
           i++;
         }
       }
