@@ -1,5 +1,7 @@
 package menu;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -10,11 +12,12 @@ import entities.Person;
 import search.Session;
 
 public class PersonSearchMenuStrategy implements MenuStrategy {
+
   private List<Person> personList;
 
   @Override
   public void showMenu(Session session) {
-    insertPeoples();
+    insertPersonsFromFile(session.getPathToData());
     Scanner scanner = new Scanner(System.in);
     int choice;
     menu:
@@ -63,6 +66,33 @@ public class PersonSearchMenuStrategy implements MenuStrategy {
     }
   }
 
+  private void insertPersonsFromFile(String path) {
+    try {
+      personList = new ArrayList<>();
+      File data = new File(path);
+      try (Scanner scanner = new Scanner(data);) {
+        while (scanner.hasNext()) {
+          String[] input = scanner.nextLine().split("\\s+");
+          Person person = null;
+          switch (input.length) {
+            case 1:
+              person = new Person(input[0]);
+              break;
+            case 2:
+              person = new Person(input[0], input[1]);
+              break;
+            case 3:
+              person = new Person(input[0], input[1], input[2]);
+              break;
+          }
+          personList.add(person);
+        }
+      }
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   private void find() {
     Scanner scanner = new Scanner(System.in);
     System.out.print("\nEnter a name or email to search all suitable people.\n> ");
@@ -81,6 +111,7 @@ public class PersonSearchMenuStrategy implements MenuStrategy {
 
     if (matches.size() == 0 || "".equals(pattern)) {
       System.out.println("No matching people found.");
+      return;
     }
 
     System.out.println("\nFound people:");
