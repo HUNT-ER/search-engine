@@ -2,6 +2,6 @@ package menu;
 
 import search.Session;
 
-public interface MenuStrategy {
+public interface MenuService {
   void showMenu(Session session);
 }

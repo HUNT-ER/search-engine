@@ -4,19 +4,15 @@ import menu.*;
 
 public class Session {
 
-  private MenuStrategy menu;
+  private MenuService menu;
   private String pathToData;
 
-  public void setMenu(MenuStrategy menu) {
+  public void setMenu(MenuService menu) {
     this.menu = menu;
   }
 
-  public Session() {
-    menu = new PersonSearchMenuStrategy();
-  }
-
   public Session(String pathToData) {
-    menu = new PersonSearchMenuStrategy();
+    menu = new PersonSearchMenuService(pathToData);
     this.pathToData = pathToData;
   }
 
