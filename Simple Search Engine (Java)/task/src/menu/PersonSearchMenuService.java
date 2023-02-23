@@ -1,30 +1,31 @@
 package menu;
 
 import database.PersonStorage;
-import java.util.Scanner;
-import search.SearchService;
-import search.Session;
+import search.AbstractSearch;
+import search.AllOptionSearchService;
+import session.Session;
+import session.UserInput;
 
 public class PersonSearchMenuService implements MenuService {
 
   private PersonStorage personStorage;
-  private SearchService searchService;
+  private AbstractSearch searchService;
 
   public PersonSearchMenuService(String pathToData) {
     this.personStorage = new PersonStorage(pathToData);
-    this.searchService = new SearchService();
+    this.searchService = new AllOptionSearchService();
   }
 
   @Override
   public void showMenu(Session session) {
-    Scanner scanner = new Scanner(System.in);
     int choice;
     menu:
     do {
       printMenuTiles();
-      choice = Integer.parseInt(scanner.nextLine().trim());
+      choice = UserInput.getIntInput();
       switch (choice) {
         case 1:
+          chooseSearchStrategy();
           searchService.find(personStorage);
           break;
         case 2:
@@ -34,7 +35,7 @@ public class PersonSearchMenuService implements MenuService {
           System.out.println("\nBye!");
           break menu;
         default:
-          System.out.println("\nIncorrect option! Try again.\n");
+          System.out.println("\nIncorrect option! Try again.");
       }
     } while (true);
   }
@@ -44,6 +45,21 @@ public class PersonSearchMenuService implements MenuService {
         + "1. Find a person\n"
         + "2. Print all people\n"
         + "0. Exit");
+  }
+
+  private void chooseSearchStrategy() {
+    System.out.println("\nSelect a matching strategy: ALL, ANY, NONE");
+    switch (UserInput.getStringInput()) {
+      case "ALL":
+        searchService = new AllOptionSearchService();
+        break;
+      case "ANY":
+        //searchService = new AllOptionSearchService();
+        break;
+      case "NONE":
+        //searchService = new AllOptionSearchService();
+        break;
+    }
   }
 
 }

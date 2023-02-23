@@ -1,6 +1,6 @@
 package menu;
 
-import search.Session;
+import session.Session;
 
 public interface MenuService {
 

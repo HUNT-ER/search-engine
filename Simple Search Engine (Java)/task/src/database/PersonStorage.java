@@ -3,7 +3,9 @@ package database;
 import entities.Person;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -38,18 +40,7 @@ public class PersonStorage {
         int i = 0;
         while (scanner.hasNext()) {
           String[] input = scanner.nextLine().split("\\s+");
-          Person person = null;
-          switch (input.length) {
-            case 1:
-              person = new Person(input[0]);
-              break;
-            case 2:
-              person = new Person(input[0], input[1]);
-              break;
-            case 3:
-              person = new Person(input[0], input[1], input[2]);
-              break;
-          }
+          Person person = Person.getPerson(input);
           personList.add(person);
           personMap.put(i, person);
           dataMap.put(i, input);
