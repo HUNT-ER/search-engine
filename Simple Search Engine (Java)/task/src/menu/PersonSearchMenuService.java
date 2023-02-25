@@ -2,7 +2,7 @@ package menu;
 
 import database.PersonStorage;
 import search.AbstractSearch;
-import search.AllOptionSearchService;
+import search.*;
 import session.Session;
 import session.UserInput;
 
@@ -13,7 +13,7 @@ public class PersonSearchMenuService implements MenuService {
 
   public PersonSearchMenuService(String pathToData) {
     this.personStorage = new PersonStorage(pathToData);
-    this.searchService = new AllOptionSearchService();
+    this.searchService = new AllMatchSearchService(personStorage);
   }
 
   @Override
@@ -26,7 +26,7 @@ public class PersonSearchMenuService implements MenuService {
       switch (choice) {
         case 1:
           chooseSearchStrategy();
-          searchService.find(personStorage);
+          searchService.find();
           break;
         case 2:
           personStorage.printAllPersons();
@@ -49,16 +49,16 @@ public class PersonSearchMenuService implements MenuService {
 
   private void chooseSearchStrategy() {
     System.out.println("\nSelect a matching strategy: ALL, ANY, NONE");
-    switch (UserInput.getStringInput()) {
-      case "ALL":
-        searchService = new AllOptionSearchService();
-        break;
+    switch (UserInput.getStringInput().toUpperCase()) {
       case "ANY":
-        //searchService = new AllOptionSearchService();
+        searchService = new AnyMatchSearchService(personStorage);
         break;
       case "NONE":
-        //searchService = new AllOptionSearchService();
+        searchService = new NoneMatchSearchService(personStorage);
         break;
+      default: {
+        searchService = new AllMatchSearchService(personStorage);
+      }
     }
   }
 

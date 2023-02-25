@@ -3,9 +3,7 @@ package database;
 import entities.Person;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +48,10 @@ public class PersonStorage {
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public String[] getStringPerson(int index) {
+    return dataMap.get(index);
   }
 
   public void printAllPersons() {
